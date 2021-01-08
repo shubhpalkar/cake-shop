@@ -8,12 +8,17 @@ import { Producttbl } from './product/product.entity';
 import { ProductModule } from './product/product.module';
 import { HttpErrorFliter } from './Shared/http_error.filter';
 import { loggingInterceptor } from './Shared/logging.interceptor';
+import { UserModule } from './user/user.module';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), OrderModule, ProductModule],
-  controllers: [AppController],
+  imports: [TypeOrmModule.forRoot(), OrderModule, ProductModule, UserModule, AuthModule],
+  controllers: [AppController, AuthController],
   providers: [AppService,{ provide: APP_FILTER, useClass: HttpErrorFliter },
-    { provide: APP_INTERCEPTOR, useClass: loggingInterceptor }],
+    { provide: APP_INTERCEPTOR, useClass: loggingInterceptor },
+    AuthService],
   })
 
 

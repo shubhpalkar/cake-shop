@@ -8,44 +8,46 @@ import Ordertbl from './order.entity';
 @Injectable()
 export class OrderService {
 
-    constructor(@InjectRepository(Ordertbl) private orderentity: Repository<Ordertbl>){}
+    constructor(@InjectRepository(Ordertbl) private orderentity: Repository<Ordertbl>) { }
     // constructor(@InjectRepository(order) private orderentity: Repository<order>){}
 
-    getOrderCake(orderdto: orderdto){
+    getOrderCake(orderdto: orderdto) {
         const ordata = this.orderentity.save(orderdto);
         return ordata;
     }
 
-    getalldata(): Promise<orderdto[]>{
+    getalldata(): Promise<orderdto[]> {
         const all = this.orderentity.find();
-        if (!all){
-            throw new HttpException ('Not Found', HttpStatus.NOT_FOUND)
+        if (!all) {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
         }
         return all;
     }
 
-    async getUpdateDate(orderid: string, data: Partial<orderdto>){
-        const updated = this.orderentity.findOne(orderid)
+    async getUpdateDate(orderid: string, data: Partial<orderdto>) {
+        const updated = await this.orderentity.findOne(orderid)
 
-        if (!updated){
-            throw new HttpException ('Not Found', HttpStatus.NOT_FOUND)
+        if (!updated) {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
+        } else {
+            await this.orderentity.update(orderid, data)
+            return updated;
         }
-       await this.orderentity.update(orderid, data)
-        return updated;
-         
+
     }
 
 
-    async getDestroyData(orderid): Promise<any>{
-        const deld = this.orderentity.findOne(orderid)
-        if (!deld){
+    async getDestroyData(orderid): Promise<any> {
+        const deld = await this.orderentity.findOne(orderid)
+        if (!deld) {
             throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
-        }
-        
+        }else{
+
         await this.orderentity.delete(orderid)
         return deld;
-          
-        
+        }
+
+
     }
-    
+
 }

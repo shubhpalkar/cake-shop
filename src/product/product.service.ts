@@ -24,4 +24,17 @@ export class ProductService {
          return this.productentity.find();
         
  }
+
+ async getupdateProduct(productid, prod: Producttbl ): Promise<any>{
+     const up = await this.productentity.findOne(productid);
+
+     if (!up){
+         console.log ('id not found');
+         throw new HttpException('Not found', HttpStatus.NOT_FOUND)
+     }
+         const data = await this.productentity.update(productid, prod);
+         return data
+    
+     
+ }
 }
